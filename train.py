@@ -24,8 +24,7 @@ def main():
 
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_PATH,
-        torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-        device_map="auto" if torch.cuda.is_available() else None,
+        torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
         low_cpu_mem_usage=True,
         local_files_only=True,
         attn_implementation="eager"
@@ -51,15 +50,16 @@ def main():
     #TRaining args
     training_args= TrainingArguments(
         output_dir=OUTPUT_PATH,
-        per_device_train_batch_size=8,
-        num_train_epochs=3,
-        gradient_accumulation_steps=4,
+        per_device_train_batch_size=12,
+        num_train_epochs=1,
+        gradient_accumulation_steps=1,
         learning_rate=0.0001,
         fp16=False,
         bf16=True,
-        save_steps=200,
+        ddp_find_unused_parameters=False,
+        save_steps=500,
         save_total_limit=2,
-        logging_dir="./logs/application.log",
+        logging_dir="./logs",
         report_to="none",
         optim="adamw_torch"
     )
