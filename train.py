@@ -51,16 +51,17 @@ def main():
     #TRaining args
     training_args= TrainingArguments(
         output_dir=OUTPUT_PATH,
-        per_device_train_batch_size=2,
+        per_device_train_batch_size=8,
         num_train_epochs=3,
         gradient_accumulation_steps=4,
-        learning_rate=0.001,
+        learning_rate=0.0001,
         fp16=False,
         bf16=True,
         save_steps=200,
         save_total_limit=2,
-        logging_dir="./logs",
-        report_to="none"
+        logging_dir="./logs/application.log",
+        report_to="none",
+        optim="adamw_torch"
     )
 
     trainer=Trainer(
